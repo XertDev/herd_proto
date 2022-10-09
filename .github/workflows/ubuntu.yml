@@ -1,0 +1,71 @@
+name: Ubuntu
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  gcc_build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install gcc
+        run: |
+          sudo apt update
+          sudo apt install gcc-10 g++-10
+        shell: bash
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install libprotobuf-dev protobuf-compiler libgrpc++-dev protobuf-compiler-grpc
+        shell: bash
+
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{github.workspace}}/build
+
+      - name: Configure CMake
+        working-directory: ${{github.workspace}}/build
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release
+        env:
+          CC:   gcc-10
+          CXX:  g++-10
+
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        run: cmake --build . --config Release
+
+  clang_build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install clang
+        run: |
+          sudo apt update
+          sudo apt install clang-10
+        shell: bash
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install libprotobuf-dev protobuf-compiler libgrpc++-dev protobuf-compiler-grpc
+        shell: bash
+
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{github.workspace}}/build
+
+      - name: Configure CMake
+        working-directory: ${{github.workspace}}/build
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Release
+        env:
+          CC:   clang-10
+          CXX:  clang++-10
+
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        run: cmake --build . --config Release
