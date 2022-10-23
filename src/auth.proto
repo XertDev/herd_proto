@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package herd;
+
+option cc_enable_arenas = true;
+
+
+message AuthenticationToken
+{
+  string authentication_token = 1;
+}
+
+message ConnectionToken {
+  string token = 1;
+}
+
+service Auth
+{
+  rpc authorize_connection (AuthenticationToken) returns (ConnectionToken) {}
+}

@@ -6,9 +6,19 @@ project(
         LANGUAGES CXX
 )
 
-include(FindProtobuf)
-find_package(Protobuf REQUIRED)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
+## Protobuf & GRPC
+find_package(Protobuf REQUIRED)
+find_package(GRPC REQUIRED)
+
+grpc_generate_cpp(
+        GRPC_SRC GRPC_HEADER
+        src/common.proto
+
+        src/auth.proto
+        src/session.proto
+)
 protobuf_generate_cpp(
         PROTO_SRC PROTO_HEADER
         src/node.proto
@@ -17,13 +27,28 @@ protobuf_generate_cpp(
         src/task.proto
 )
 
-add_custom_target(herd_proto-generate)
+add_custom_target(
+        herd_proto-generate
+        DEPENDS
+        ${GRPC_SRC} ${GRPC_HEADER}
+        ${PROTO_SRC} ${PROTO_HEADER}
+)
 
 
 add_library(herd_proto)
-target_sources(herd_proto PRIVATE ${PROTO_SRC} ${PROTO_HEADER})
+add_dependencies(herd_proto herd_proto-generate)
+target_sources(
+        herd_proto
+        PRIVATE
+        ${PROTO_SRC} ${PROTO_HEADER}
+        ${GRPC_SRC} ${GRPC_HEADER}
+)
 
 target_include_directories(herd_proto PUBLIC ${PROTOBUF_INCLUDE_DIR})
 target_include_directories(herd_proto SYSTEM INTERFACE ${CMAKE_CURRENT_BINARY_DIR})
-
-add_dependencies(herd_proto herd_proto-generate)
+target_link_libraries(
+        herd_proto
+        PUBLIC
+        protobuf::libprotobuf
+        ${GRPC_LIBRARIES}
+)
