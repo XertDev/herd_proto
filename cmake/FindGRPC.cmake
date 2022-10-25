@@ -217,14 +217,15 @@ function(PROTOBUF_GENERATE_CPP SRCS HDRS)
         get_filename_component(FIL_DIR ${ABS_FIL} DIRECTORY)
 
         list(APPEND _protobuf_include_path -I ${FIL_DIR})
-        list(APPEND ${SRCS} "${CMAKE_BINARY_DIR}/${FIL_WE}.pb.cc")
-        list(APPEND ${HDRS} "${CMAKE_BINARY_DIR}/${FIL_WE}.pb.h")
+        list(APPEND ${SRCS} "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}.pb.cc")
+        list(APPEND ${HDRS} "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}.pb.h")
 
         add_custom_command(
-                OUTPUT "${CMAKE_BINARY_DIR}/${FIL_WE}.pb.cc"
-                "${CMAKE_BINARY_DIR}/${FIL_WE}.pb.h"
+                OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}.pb.cc"
+                "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}.pb.h"
                 COMMAND  ${PROTOBUF_PROTOC_EXECUTABLE}
-                ARGS --cpp_out  ${CMAKE_BINARY_DIR} ${_protobuf_include_path} ${ABS_FIL}
+                ARGS --cpp_out  ${CMAKE_CURRENT_BINARY_DIR}
+                ${_protobuf_include_path} ${ABS_FIL}
                 DEPENDS ${ABS_FIL} ${PROTOBUF_PROTOC_EXECUTABLE}
                 COMMENT "Running C++ protocol buffer compiler on ${FIL}"
                 VERBATIM )
@@ -274,10 +275,10 @@ function(PROTOBUF_GENERATE_PYTHON SRCS)
         get_filename_component(FIL_DIR ${ABS_FIL} DIRECTORY)
 
         list(APPEND _protobuf_include_path -I ${FIL_DIR})
-        list(APPEND ${SRCS} "${CMAKE_BINARY_DIR}/${FIL_WE}_pb2.py")
+        list(APPEND ${SRCS} "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}_pb2.py")
         add_custom_command(
-                OUTPUT "${CMAKE_BINARY_DIR}/${FIL_WE}_pb2.py"
-                COMMAND  ${PROTOBUF_PROTOC_EXECUTABLE} --python_out ${CMAKE_BINARY_DIR} ${_protobuf_include_path} ${ABS_FIL}
+                OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}_pb2.py"
+                COMMAND  ${PROTOBUF_PROTOC_EXECUTABLE} --python_out ${CMAKE_CURRENT_BINARY_DIR} ${_protobuf_include_path} ${ABS_FIL}
                 DEPENDS ${ABS_FIL} ${PROTOBUF_PROTOC_EXECUTABLE}
                 COMMENT "Running Python protocol buffer compiler on ${FIL}"
                 VERBATIM )
@@ -411,12 +412,12 @@ function(GRPC_GENERATE_PYTHON SRCS)
         get_filename_component(FIL_DIR ${ABS_FIL} DIRECTORY)
 
         list(APPEND _protobuf_include_path -I ${FIL_DIR})
-        list(APPEND ${SRCS} "${CMAKE_BINARY_DIR}/${FIL_WE}_pb2.py"
-                "${CMAKE_BINARY_DIR}/${FIL_WE}_pb2_grpc.py")
+        list(APPEND ${SRCS} "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}_pb2.py"
+                "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}_pb2_grpc.py")
 
         add_custom_command(
-                OUTPUT "${CMAKE_BINARY_DIR}/${FIL_WE}_pb2.py" "${CMAKE_BINARY_DIR}/${FIL_WE}_pb2_grpc.py"
-                COMMAND  ${PYTHON_EXECUTABLE} -m grpc_tools.protoc ${_protobuf_include_path}  --python_out ${CMAKE_BINARY_DIR} --grpc_python_out ${CMAKE_BINARY_DIR} ${ABS_FIL}
+                OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}_pb2.py" "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}_pb2_grpc.py"
+                COMMAND  ${PYTHON_EXECUTABLE} -m grpc_tools.protoc ${_protobuf_include_path}  --python_out ${CMAKE_CURRENT_BINARY_DIR} --grpc_python_out ${CMAKE_CURRENT_BINARY_DIR} ${ABS_FIL}
                 DEPENDS ${ABS_FIL} ${PROTOBUF_PROTOC_EXECUTABLE}
                 COMMENT "Running Python protocol buffer compiler on ${FIL} for grpc"
                 VERBATIM )
