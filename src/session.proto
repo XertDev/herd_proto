@@ -28,10 +28,39 @@ message SessionInfoList
   repeated SessionInfo sessions = 1;
 }
 
+message SessionAddKeyOptions
+{
+  string session_uuid = 1;
+  SchemaType type = 2;
+}
+
+message SessionAddKeyRequest
+{
+  oneof content
+  {
+      SessionAddKeyOptions options = 1;
+      DataBlob data = 2;
+  }
+}
+
+message SessionRemoveKeyRequest
+{
+  string session_uuid = 1;
+  SchemaType type = 2;
+}
+
+message SessionKeyList
+{
+  repeated SchemaType type = 1;
+}
+
 service Session
 {
   rpc create_session (SessionCreateRequest) returns (SessionInfo) {};
   rpc destroy_session (SessionDestroyRequest) returns (Empty) {};
   rpc list_sessions (Empty) returns (SessionInfoList) {};
 
+  rpc add_key (stream SessionAddKeyRequest) returns (Empty) {};
+  rpc remove_key (SessionRemoveKeyRequest) returns (Empty) {};
+  rpc list_keys (Empty) returns (SessionKeyList) {};
 }

@@ -7,3 +7,14 @@ option cc_enable_arenas = true;
 message Empty
 {
 }
+
+message DataBlob
+{
+  repeated bytes data = 2;
+}
+
+enum SchemaType
+{
+  BINFHE = 0;
+}
+
