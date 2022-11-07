@@ -10,7 +10,7 @@ message Empty
 
 message DataBlob
 {
-  repeated bytes data = 2;
+  bytes blob = 2;
 }
 
 enum SchemaType

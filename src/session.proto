@@ -32,6 +32,7 @@ message SessionAddKeyOptions
 {
   string session_uuid = 1;
   SchemaType type = 2;
+  uint32 size = 3;
 }
 
 message SessionAddKeyRequest
@@ -49,6 +50,11 @@ message SessionRemoveKeyRequest
   SchemaType type = 2;
 }
 
+message SessionKeyListRequest
+{
+  string session_uuid = 1;
+}
+
 message SessionKeyList
 {
   repeated SchemaType type = 1;
@@ -62,5 +68,5 @@ service Session
 
   rpc add_key (stream SessionAddKeyRequest) returns (Empty) {};
   rpc remove_key (SessionRemoveKeyRequest) returns (Empty) {};
-  rpc list_keys (Empty) returns (SessionKeyList) {};
+  rpc list_keys (SessionKeyListRequest) returns (SessionKeyList) {};
 }
