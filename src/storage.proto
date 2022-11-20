@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package herd.proto;
+
+option cc_enable_arenas = true;
+
+import "common.proto";
+
+
+message ColumnDescriptor
+{
+  string name     = 1;
+  ColumnType type = 2;
+}
+
+message DataFrameMetadata
+{
+  string uuid = 1;
+  string name = 2;
+
+  repeated ColumnDescriptor columns = 3;
+  uint32 rows_count = 4;
+}
+
+message DataFrameMetadataList
+{
+  repeated DataFrameMetadata dataframes = 1;
+}
+
+message DataFrameAddOptions
+{
+  string session_uuid = 1;
+  string name         = 2;
+  SchemaType type     = 3;
+
+  repeated ColumnDescriptor columns = 4;
+  uint32 rows_count                 = 5;
+}
+
+message DataFrameAddRequest
+{
+  oneof content
+  {
+    DataFrameAddOptions info = 1;
+    DataBlob data = 2;
+  }
+}
+
+message DataFrameRemoveRequest
+{
+  string session_uuid = 1;
+  string uuid = 2;
+}
+
+message DataFrameListRequest
+{
+  string session_uuid = 1;
+}
+
+message DataFrameDownloadDataRequest
+{
+  string session_uuid = 1;
+  string uuid = 2;
+
+  uint64 offset = 3;
+  uint64 size = 4;
+}
+
+message DataFrameDownloadDataResponse
+{
+  oneof content
+  {
+    DataFrameMetadata info = 1;
+    DataBlob data = 2;
+  }
+}
+
+service Storage
+{
+  rpc add_data_frame (stream DataFrameAddRequest) returns (DataFrameMetadata) {};
+  rpc remove_data_frame (DataFrameRemoveRequest) returns (Empty) {};
+
+  rpc list_data_frames (DataFrameListRequest) returns (DataFrameMetadataList) {}
+
+  rpc download_data_frame (DataFrameDownloadDataRequest) returns (DataFrameDownloadDataResponse) {};
+}

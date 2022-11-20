@@ -17,6 +17,7 @@ grpc_generate_cpp(
 
         src/auth.proto
         src/session.proto
+        src/storage.proto
 )
 protobuf_generate_cpp(
         PROTO_SRC PROTO_HEADER
