@@ -18,8 +18,10 @@ message DataFrameMetadata
   string uuid = 1;
   string name = 2;
 
-  repeated ColumnDescriptor columns = 3;
-  uint32 rows_count = 4;
+  SchemaType schema_type = 3;
+
+  repeated ColumnDescriptor columns = 4;
+  uint32 rows_count = 5;
 }
 
 message DataFrameMetadataList
