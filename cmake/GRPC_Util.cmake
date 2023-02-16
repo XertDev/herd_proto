@@ -431,75 +431,6 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     set(_GRPC_ARCH_DIR x64/)
 endif()
 
-# Internal function: search for normal library as well as a debug one
-#    if the debug one is specified also include debug/optimized keywords
-#    in *_LIBRARIES variable
-function(_protobuf_find_libraries name filename)
-    find_library(${name}_LIBRARY
-            NAMES ${filename}
-            PATHS ${PROTOBUF_SRC_ROOT_FOLDER}/vsprojects/${_PROTOBUF_ARCH_DIR}Release)
-    mark_as_advanced(${name}_LIBRARY)
-
-    find_library(${name}_LIBRARY_DEBUG
-            NAMES ${filename}
-            PATHS ${PROTOBUF_SRC_ROOT_FOLDER}/vsprojects/${_PROTOBUF_ARCH_DIR}Debug)
-    mark_as_advanced(${name}_LIBRARY_DEBUG)
-
-    if(NOT ${name}_LIBRARY_DEBUG)
-        # There is no debug library
-        set(${name}_LIBRARY_DEBUG ${${name}_LIBRARY} PARENT_SCOPE)
-        set(${name}_LIBRARIES     ${${name}_LIBRARY} PARENT_SCOPE)
-    else()
-        # There IS a debug library
-        set(${name}_LIBRARIES
-                optimized ${${name}_LIBRARY}
-                debug     ${${name}_LIBRARY_DEBUG}
-                PARENT_SCOPE
-                )
-    endif()
-endfunction()
-
-# Internal function: search for normal library
-function(_grpc_find_libraries name filename)
-    find_library(${name}_LIBRARY
-            NAMES ${filename}
-            PATHS ${GRPC_SRC_ROOT_FOLDER}/vsprojects/${_GRPC_ARCH_DIR}Release)
-    mark_as_advanced(${name}_LIBRARY)
-
-    find_library(${name}_LIBRARY_DEBUG
-            NAMES ${filename}
-            PATHS ${GRPC_SRC_ROOT_FOLDER}/vsprojects/${_GRPC_ARCH_DIR}Debug)
-    mark_as_advanced(${name}_LIBRARY_DEBUG)
-
-    if(NOT ${name}_LIBRARY_DEBUG)
-        # There is no debug library
-        set(${name}_LIBRARY_DEBUG ${${name}_LIBRARY} PARENT_SCOPE)
-    else()
-        # There IS a debug library
-        set(${name}_LIBRARIES
-                optimized ${${name}_LIBRARY}
-                debug     ${${name}_LIBRARY_DEBUG}
-                PARENT_SCOPE
-                )
-    endif()
-endfunction()
-
-# Internal function: find threads library
-function(_protobuf_find_threads)
-    set(CMAKE_THREAD_PREFER_PTHREAD TRUE)
-    find_package(Threads)
-    if(Threads_FOUND)
-        list(APPEND PROTOBUF_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
-        set(PROTOBUF_LIBRARIES "${PROTOBUF_LIBRARIES}" PARENT_SCOPE)
-    endif()
-endfunction()
-
-# Internal function: find dl library
-function(_grpc_find_dl)
-    list(APPEND GRPC_LIBRARIES "-ldl")
-    set(GRPC_LIBRARIES ${GRPC_LIBRARIES} PARENT_SCOPE)
-endfunction()
-
 #
 # Main.
 #
@@ -509,57 +440,6 @@ endfunction()
 if(NOT DEFINED PROTOBUF_GENERATE_CPP_APPEND_PATH)
     set(PROTOBUF_GENERATE_CPP_APPEND_PATH TRUE)
 endif()
-
-
-# Google's provided vcproj files generate libraries with a "lib"
-# prefix on Windows
-if(MSVC)
-    set(PROTOBUF_ORIG_FIND_LIBRARY_PREFIXES "${CMAKE_FIND_LIBRARY_PREFIXES}")
-    set(CMAKE_FIND_LIBRARY_PREFIXES "lib" "")
-
-    find_path(PROTOBUF_SRC_ROOT_FOLDER protobuf.pc.in)
-    find_path(GRPC_SRC_ROOT_FOLDER grpc.def)
-endif()
-
-# The Protobuf library
-_protobuf_find_libraries(PROTOBUF protobuf)
-#DOC "The Google Protocol Buffers RELEASE Library"
-
-_protobuf_find_libraries(PROTOBUF_LITE protobuf-lite)
-
-# The Protobuf Protoc Library
-_protobuf_find_libraries(PROTOBUF_PROTOC protoc)
-
-# Restore original find library prefixes
-if(MSVC)
-    set(CMAKE_FIND_LIBRARY_PREFIXES "${PROTOBUF_ORIG_FIND_LIBRARY_PREFIXES}")
-endif()
-
-_grpc_find_libraries(GRPC grpc)
-_grpc_find_libraries(GRPC++ grpc++)
-_grpc_find_libraries(GRPC++_REFLECTION grpc++_reflection)
-
-if(UNIX)
-    _protobuf_find_threads()
-    _grpc_find_dl()
-endif()
-
-set(GRPC_LIBRARIES ${GRPC_LIBRARY})
-list(APPEND GRPC_LIBRARIES ${GRPC++_LIBRARY} ${GRPC++_REFLECTION_LIBRARY})
-list(APPEND GRPC_LIBRARIES ${PROTOBUF_LIBRARIES})
-
-# Find the include directory
-find_path(PROTOBUF_INCLUDE_DIR
-        google/protobuf/service.h
-        PATHS ${PROTOBUF_SRC_ROOT_FOLDER}/src
-        )
-mark_as_advanced(PROTOBUF_INCLUDE_DIR)
-
-find_path(GRPC_INCLUDE_DIR
-        grpc/grpc.h
-        PATHS ${GRPC_SRC_ROOT_FOLDER}/include
-        )
-mark_as_advanced(GRPC_INCLUDE_DIR)
 
 # Find the protoc Executable
 find_program(PROTOBUF_PROTOC_EXECUTABLE
@@ -589,15 +469,3 @@ find_program(GRPC_PYTHON_PLUGIN
         )
 mark_as_advanced(GRPC_PYTHON_PLUGIN)
 
-find_package(PackageHandleStandardArgs)
-
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(GRPC DEFAULT_MSG
-        GRPC_LIBRARY GRPC_INCLUDE_DIR PROTOBUF_INCLUDE_DIR
-        GRPC_PYTHON_PLUGIN GRPC_CPP_PLUGIN)
-
-if(PROTOBUF_FOUND)
-    set(PROTOBUF_INCLUDE_DIRS ${PROTOBUF_INCLUDE_DIR})
-endif()
-if(GRPC_FOUND)
-    set(GRPC_INCLUDE_DIRS ${GRPC_INCLUDE_DIR})
-endif()

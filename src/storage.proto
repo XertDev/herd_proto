@@ -10,7 +10,7 @@ import "common.proto";
 message ColumnDescriptor
 {
   string name     = 1;
-  ColumnType type = 2;
+  DataType type = 2;
 }
 
 message DataFrameMetadata

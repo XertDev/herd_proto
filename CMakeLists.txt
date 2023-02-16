@@ -9,7 +9,8 @@ project(
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 ## Protobuf & GRPC
-find_package(GRPC REQUIRED)
+find_package(gRPC REQUIRED)
+include(cmake/GRPC_Util.cmake)
 
 grpc_generate_cpp(
         GRPC_SRC GRPC_HEADER
@@ -49,6 +50,6 @@ target_include_directories(herd_proto SYSTEM INTERFACE ${CMAKE_CURRENT_BINARY_DI
 target_link_libraries(
         herd_proto
         PUBLIC
-        ${GRPC_LIBRARIES}
+        gRPC::grpc++
         ${PROTOBUF_LIBRARIES}
 )
