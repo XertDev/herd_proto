@@ -36,7 +36,7 @@ message DataFrameAddOptions
   SchemaType type     = 3;
 
   repeated ColumnDescriptor columns = 4;
-  uint32 rows_count                 = 5;
+  uint32 row_count                 = 5;
 }
 
 message DataFrameAddRequest
@@ -45,6 +45,14 @@ message DataFrameAddRequest
   {
     DataFrameAddOptions info = 1;
     DataBlob data = 2;
+  }
+}
+
+message DataFrameAddResponse
+{
+  oneof content
+  {
+    DataFrameMetadata metadata = 1;
   }
 }
 
@@ -79,7 +87,7 @@ message DataFrameDownloadDataResponse
 
 service Storage
 {
-  rpc add_data_frame (stream DataFrameAddRequest) returns (DataFrameMetadata) {};
+  rpc add_data_frame (stream DataFrameAddRequest) returns (stream DataFrameAddResponse) {};
   rpc remove_data_frame (DataFrameRemoveRequest) returns (Empty) {};
 
   rpc list_data_frames (DataFrameListRequest) returns (DataFrameMetadataList) {}
