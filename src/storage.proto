@@ -65,6 +65,7 @@ message DataFrameRemoveRequest
 message DataFrameListRequest
 {
   string session_uuid = 1;
+  optional SchemaType type = 2;
 }
 
 message DataFrameDownloadDataRequest
