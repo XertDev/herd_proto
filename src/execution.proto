@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package herd.proto;
+
+option cc_enable_arenas = true;
+
+import "execution_plan.proto";
+
+
+message JobDescriptor
+{
+  string uuid = 1;
+}
+
+message JobDescription
+{
+  ExecutionPlan plan = 1;
+  uint64 estimated_complexity = 2;
+}
+
+enum JobStatus
+{
+  WAITING_FOR_EXECUTION = 0;
+  PENDING = 1;
+  COMPLETED = 2;
+  FAILED = 3;
+}
+
+message JobState
+{
+  string uuid = 1;
+  JobStatus status = 2;
+
+  optional uint32 current_stage = 3;
+  optional string message = 4;
+}
+
+message JobStateList
+{
+  repeated JobState states = 1;
+}
+
+message DescribeJobRequest
+{
+  string session_uuid = 1;
+  string uuid = 2;
+}
+
+message GetJobStateRequest
+{
+  string session_uuid = 1;
+  string uuid = 2;
+}
+
+message ListJobsRequest
+{
+  string session_uuid = 1;
+}
+
+message ScheduleJobRequest
+{
+  ExecutionPlan plan = 1;
+}
+
+service Execution
+{
+  rpc describe_job (DescribeJobRequest) returns (JobDescription) {};
+  rpc get_job_state (GetJobStateRequest) returns (JobState) {};
+  rpc list_jobs (ListJobsRequest) returns (JobStateList) {};
+
+  rpc schedule_job (ScheduleJobRequest) returns (JobState) {};
+}

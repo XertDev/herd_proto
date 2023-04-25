@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package herd.proto;
+
+option cc_enable_arenas = true;
+
+import "common.proto";
+
+
+message MappingStage
+{
+  string uuid = 1;
+}
+
+message ExecutionStage
+{
+  oneof stage
+  {
+    MappingStage mapping_stage = 1;
+  }
+}
+
+message ExecutionPlan
+{
+  repeated ExecutionStage stages = 1;
+}

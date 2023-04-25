@@ -16,11 +16,14 @@ include(cmake/GRPC_Util.cmake)
 grpc_generate_cpp(
         GRPC_SRC GRPC_HEADER
         src/common.proto
+        src/execution_plan.proto
 
         src/auth.proto
         src/session.proto
         src/storage.proto
+        src/execution.proto
 )
+
 protobuf_generate_cpp(
         PROTO_SRC PROTO_HEADER
         src/node.proto
