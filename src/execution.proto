@@ -14,8 +14,9 @@ message JobDescriptor
 
 message JobDescription
 {
-  ExecutionPlan plan = 1;
-  uint64 estimated_complexity = 2;
+  string uuid = 1;
+  ExecutionPlan plan = 2;
+  uint64 estimated_complexity = 3;
 }
 
 enum JobStatus
@@ -68,5 +69,5 @@ service Execution
   rpc get_job_state (GetJobStateRequest) returns (JobState) {};
   rpc list_jobs (ListJobsRequest) returns (JobStateList) {};
 
-  rpc schedule_job (ScheduleJobRequest) returns (JobState) {};
+  rpc schedule_job (ScheduleJobRequest) returns (JobDescription) {};
 }
