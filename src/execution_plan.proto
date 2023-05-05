@@ -7,16 +7,24 @@ option cc_enable_arenas = true;
 import "common.proto";
 
 
+message InputStage
+{
+  string data_frame_uuid = 2;
+}
+
 message MappingStage
 {
-  string uuid = 1;
 }
 
 message ExecutionStage
 {
+  repeated uint32 parent_stages = 1;
+  SchemaType schema_type = 2;
+
   oneof stage
   {
-    MappingStage mapping_stage = 1;
+    InputStage input = 3;
+    MappingStage mapping = 4;
   }
 }
 

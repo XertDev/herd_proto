@@ -60,7 +60,8 @@ message ListJobsRequest
 
 message ScheduleJobRequest
 {
-  ExecutionPlan plan = 1;
+  string session_uuid = 1;
+  ExecutionPlan plan = 2;
 }
 
 service Execution
