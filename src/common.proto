@@ -8,6 +8,12 @@ message Empty
 {
 }
 
+message Edge
+{
+  uint32 start = 1;
+  uint32 end = 2;
+}
+
 message DataBlob
 {
   bytes blob = 1;

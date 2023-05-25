@@ -5,30 +5,17 @@ package herd.proto;
 option cc_enable_arenas = true;
 
 import "common.proto";
+import "stage.proto";
 
 
-message InputStage
+message ExecutionGraph
 {
-  string data_frame_uuid = 2;
-}
-
-message MappingStage
-{
-}
-
-message ExecutionStage
-{
-  repeated uint32 parent_stages = 1;
-  SchemaType schema_type = 2;
-
-  oneof stage
-  {
-    InputStage input = 3;
-    MappingStage mapping = 4;
-  }
+  repeated Stage stages = 1;
+  repeated Edge edges = 2;
 }
 
 message ExecutionPlan
 {
-  repeated ExecutionStage stages = 1;
+  ExecutionGraph execution_graph = 1;
+  SchemaType schema_type = 2;
 }

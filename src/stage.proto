@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package herd.proto;
+
+option cc_enable_arenas = true;
+
+import "circuit.proto";
+
+message InputStage
+{
+  string data_frame_uuid = 2;
+}
+
+message MapperStage
+{
+  Circuit circuit = 1;
+}
+
+message OutputStage
+{
+  optional string name = 1;
+}
+
+message Stage
+{
+  oneof stage
+  {
+    InputStage input = 1;
+    OutputStage output = 2;
+    MapperStage mapper = 3;
+  }
+}
