@@ -16,7 +16,7 @@ include(cmake/GRPC_Util.cmake)
 grpc_generate_cpp(
         GRPC_SRC GRPC_HEADER
         src/common.proto
-        src/execution_plan.proto
+
 
         src/auth.proto
         src/session.proto
@@ -26,10 +26,11 @@ grpc_generate_cpp(
 
 protobuf_generate_cpp(
         PROTO_SRC PROTO_HEADER
-        src/node.proto
         src/ciphertext_value.proto
-        src/circuit_graph.proto
-        src/task.proto
+        src/circuit.proto
+        src/execution_plan.proto
+        src/stage.proto
+        src/node.proto
 )
 
 add_custom_target(

@@ -4,10 +4,12 @@ package herd.proto;
 
 option cc_enable_arenas = true;
 
-message CiphertextValue {
+message CiphertextValue
+{
   repeated bytes raw = 1;
 }
 
-message CiphertextRegister {
+message CiphertextRegister
+{
   repeated CiphertextValue values= 1;
 }

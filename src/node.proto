@@ -4,27 +4,42 @@ package herd.proto;
 
 option cc_enable_arenas = true;
 
-message NodeMeta {
-  uint32 id = 1;
+message InputNode
+{
+  uint32 tuple_index = 1;
+  uint32 bit_index = 2;
 }
 
-message InputNode {
-  NodeMeta meta = 1;
-
-  uint32 input_offset = 2;
-  repeated NodeMeta children = 3;
+message OutputNode
+{
+  uint32 tuple_index = 1;
+  uint32 bit_index = 2;
 }
 
-message OutputNode {
-  NodeMeta meta = 1;
-
-  uint32 output_offset = 2;
+message ConstantNode
+{
+  bool value = 1;
 }
 
-message OperationNode {
-  NodeMeta meta = 1;
+enum Operation
+{
+  AND   = 0;
+  OR    = 1;
+  NOT   = 2;
+}
 
-  uint32 operation_code = 2;
+message OperationNode
+{
+  Operation type = 1;
+}
 
-  repeated NodeMeta children = 3;
+message Node
+{
+  oneof node
+  {
+    InputNode input = 1;
+    OutputNode output = 2;
+    ConstantNode constant = 3;
+    OperationNode operation = 4;
+  }
 }
