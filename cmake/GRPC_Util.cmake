@@ -414,7 +414,6 @@ function(GRPC_GENERATE_PYTHON SRCS)
         list(APPEND _protobuf_include_path -I ${FIL_DIR})
         list(APPEND ${SRCS} "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}_pb2.py"
                 "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}_pb2_grpc.py")
-
         add_custom_command(
                 OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}_pb2.py" "${CMAKE_CURRENT_BINARY_DIR}/${FIL_WE}_pb2_grpc.py"
                 COMMAND  ${PYTHON_EXECUTABLE} -m grpc_tools.protoc ${_protobuf_include_path}  --python_out ${CMAKE_CURRENT_BINARY_DIR} --grpc_python_out ${CMAKE_CURRENT_BINARY_DIR} ${ABS_FIL}

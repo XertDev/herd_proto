@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package herd.proto;
+
+option cc_enable_arenas = true;
+
+import "common.proto";
+import "circuit.proto";
+
+
+message DataFramePtr
+{
+  string data_frame_uuid = 1;
+  uint64 block_id = 2;
+}
+
+message CryptoKeyPtr
+{
+  string key_uuid = 2;
+  SchemaType schema_type = 3;
+}
+
+message Task
+{
+  string session_uuid = 1;
+  DataFramePtr input_data_frame_ptr = 2;
+  DataFramePtr output_data_frame_ptr = 3;
+  uint64 row_count = 4;
+
+  CryptoKeyPtr crypto_key_ptr = 5;
+
+  Circuit circuit = 6;
+}
+
+enum CompletionStatus
+{
+  SUCCESS = 0;
+  TIMED_OUT = 1;
+  ERROR = 2;
+}
+
+service Worker
+{
+  rpc run (Task) returns (Empty) {}
+}

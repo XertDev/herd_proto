@@ -13,6 +13,7 @@ find_package(Protobuf REQUIRED)
 find_package(gRPC REQUIRED)
 include(cmake/GRPC_Util.cmake)
 
+set(PROTOBUF_IMPORT_DIRS "${CMAKE_CURRENT_LIST_DIR}/src")
 grpc_generate_cpp(
         GRPC_SRC GRPC_HEADER
         src/common.proto
@@ -22,6 +23,8 @@ grpc_generate_cpp(
         src/session.proto
         src/storage.proto
         src/execution.proto
+
+        src/worker.proto
 )
 
 protobuf_generate_cpp(
@@ -39,7 +42,6 @@ add_custom_target(
         ${GRPC_SRC} ${GRPC_HEADER}
         ${PROTO_SRC} ${PROTO_HEADER}
 )
-
 
 add_library(herd_proto)
 add_dependencies(herd_proto herd_proto-generate)
