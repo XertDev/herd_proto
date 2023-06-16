@@ -30,7 +30,7 @@ runs:
         mkdir build -p
         cd build
         cmake .. -DgRPC_INSTALL=ON 
-        make
+        make -j 4
 
     - name: Install GRPC
       working-directory: ${{ inputs.prefix }}/build
