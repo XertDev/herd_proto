@@ -3,6 +3,11 @@ inputs:
     description: 'Install prefix'
     default: '.'
 
+  parallel:
+    required: false
+    description: 'Thread count'
+    default: '1'
+
 runs:
   using: "composite"
   steps:
@@ -30,7 +35,7 @@ runs:
         mkdir build -p
         cd build
         cmake .. -DgRPC_INSTALL=ON 
-        make -j 4
+        make -j ${{ inputs.parallel }}
 
     - name: Install GRPC
       working-directory: ${{ inputs.prefix }}/build
