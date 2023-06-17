@@ -16,8 +16,7 @@ message DataFramePtr
 
 message CryptoKeyPtr
 {
-  string key_uuid = 2;
-  SchemaType schema_type = 3;
+  SchemaType schema_type = 1;
 }
 
 message Task
