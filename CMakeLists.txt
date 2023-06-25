@@ -29,7 +29,7 @@ grpc_generate_cpp(
 
 protobuf_generate_cpp(
         PROTO_SRC PROTO_HEADER
-        src/ciphertext_value.proto
+        src/crypto_value.proto
         src/circuit.proto
         src/execution_plan.proto
         src/stage.proto

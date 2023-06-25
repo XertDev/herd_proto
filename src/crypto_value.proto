@@ -4,12 +4,13 @@ package herd.proto;
 
 option cc_enable_arenas = true;
 
-message CiphertextValue
+message CryptoValue
 {
   repeated bytes raw = 1;
 }
 
-message CiphertextRegister
+message CryptoVector
 {
-  repeated CiphertextValue values= 1;
+  repeated bytes raw = 1;
+  uint64 size = 2;
 }

@@ -14,21 +14,37 @@ message DataFramePtr
   uint64 block_id = 2;
 }
 
+message InputDataFramePtr
+{
+  DataFramePtr pointer = 1;
+  uint64 row_count = 4;
+}
+
 message CryptoKeyPtr
 {
   SchemaType schema_type = 1;
 }
 
-message Task
+message MapTask
 {
   string session_uuid = 1;
-  DataFramePtr input_data_frame_ptr = 2;
+  InputDataFramePtr input_data_frame_ptr = 2;
   DataFramePtr output_data_frame_ptr = 3;
-  uint64 row_count = 4;
 
-  CryptoKeyPtr crypto_key_ptr = 5;
+  CryptoKeyPtr crypto_key_ptr = 4;
 
-  Circuit circuit = 6;
+  Circuit circuit = 5;
+}
+
+message ReduceTask
+{
+  string session_uuid = 1;
+  repeated InputDataFramePtr input_data_frame_ptrs = 2;
+  DataFramePtr output_data_frame_ptr = 3;
+
+  CryptoKeyPtr crypto_key_ptr = 4;
+
+  Circuit circuit = 5;
 }
 
 enum CompletionStatus
@@ -40,5 +56,6 @@ enum CompletionStatus
 
 service Worker
 {
-  rpc run (Task) returns (Empty) {}
+  rpc map (MapTask) returns (Empty) {}
+  rpc reduce (ReduceTask) returns (Empty) {}
 }
