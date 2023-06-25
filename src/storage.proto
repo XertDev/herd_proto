@@ -22,6 +22,7 @@ message DataFrameMetadata
 
   repeated ColumnDescriptor columns = 4;
   uint32 rows_count = 5;
+  uint32 partitions = 6;
 }
 
 message DataFrameMetadataList
@@ -36,7 +37,8 @@ message DataFrameAddOptions
   SchemaType type     = 3;
 
   repeated ColumnDescriptor columns = 4;
-  uint32 row_count                 = 5;
+  uint32 row_count                  = 5;
+  uint32 partitions                 = 6;
 }
 
 message DataFrameAddRequest
