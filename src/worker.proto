@@ -11,7 +11,7 @@ import "circuit.proto";
 message DataFramePtr
 {
   string data_frame_uuid = 1;
-  uint64 block_id = 2;
+  uint32 partition = 2;
 }
 
 message InputDataFramePtr
