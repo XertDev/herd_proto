@@ -10,8 +10,8 @@ option cc_enable_arenas = true;
 
 message Circuit
 {
-  repeated uint32 input = 1;
-  repeated uint32 output = 2;
+  repeated DataType input = 1;
+  repeated DataType output = 2;
 
   repeated Node nodes = 3;
   repeated Edge edges = 4;
