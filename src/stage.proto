@@ -16,6 +16,18 @@ message MapperStage
   Circuit circuit = 1;
 }
 
+enum Policy
+{
+  SEQUENCED = 0;
+  PARALLEL = 1;
+}
+
+message ReduceStage
+{
+  Circuit circuit = 1;
+  Policy policy = 2;
+}
+
 message OutputStage
 {
   optional string name = 1;
@@ -28,5 +40,6 @@ message Stage
     InputStage input = 1;
     OutputStage output = 2;
     MapperStage mapper = 3;
+    ReduceStage reduce = 4;
   }
 }

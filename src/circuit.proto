@@ -7,6 +7,11 @@ import "node.proto";
 
 option cc_enable_arenas = true;
 
+message InputStructure
+{
+  repeated DataType fields = 1;
+}
+
 message OutputColumn
 {
   DataType data_type = 1;
@@ -15,7 +20,7 @@ message OutputColumn
 
 message Circuit
 {
-  repeated DataType input = 1;
+  repeated InputStructure inputs = 1;
   repeated OutputColumn output = 2;
 
   repeated Node nodes = 3;
