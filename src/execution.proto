@@ -62,6 +62,7 @@ message ScheduleJobRequest
 {
   string session_uuid = 1;
   ExecutionPlan plan = 2;
+  uint32 concurrency_limit = 3;
 }
 
 service Execution
