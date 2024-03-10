@@ -20,12 +20,14 @@ enum Policy
 {
   SEQUENCED = 0;
   PARALLEL = 1;
+  PARALLEL_FULL = 2;
 }
 
 message ReduceStage
 {
   Circuit circuit = 1;
   Policy policy = 2;
+  optional uint32 parallel_tree_level_limit = 3;
 }
 
 message OutputStage
