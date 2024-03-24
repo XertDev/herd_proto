@@ -27,7 +27,7 @@ message ReduceStage
 {
   Circuit circuit = 1;
   Policy policy = 2;
-  optional uint32 parallel_tree_level_limit = 3;
+  optional uint32 per_node_count = 3;
 }
 
 message OutputStage
